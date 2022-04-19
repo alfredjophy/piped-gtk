@@ -80,18 +80,18 @@ impl API{
     }
 
     pub async fn channel_from_id(&self,channel_id:&str) -> Result<Channel,Error>{
-        let url = self.create_url_from_endpoint(&format!("/comments/{}",channel_id));
+        let url = self.create_url_from_endpoint(&format!("/channel/{}",channel_id));
         let response = self.client.get(url).send().await?;
         let data = response.json::<Channel>().await?;
         Ok(data)
     }
-
-    pub async fn channel_from_name(&self,channel_name:&str)->Result<Channel,Error>{
-        let url = self.create_url_from_endpoint(&format!("/comments/{}",channel_name));
-        let response = self.client.get(url).send().await?;
-        let data = response.json::<Channel>().await?;
-        Ok(data)
-    }
+    // broken 
+    //pub async fn channel_from_name(&self,channel_name:&str)->Result<Channel,Error>{
+        //let url = self.create_url_from_endpoint(&format!("/c/{}",channel_name));
+        //let response = self.client.get(url).send().await?;
+        //let data = response.json::<Channel>().await?;
+        //Ok(data)
+    //}
     pub async fn channel_from_username(&self,username:&str)->Result<Channel,Error>{
         let url = self.create_url_from_endpoint(&format!("/user/{}",username));
         let response = self.client.get(url).send().await?;
@@ -99,7 +99,7 @@ impl API{
         Ok(data)
     }
     pub async fn suggestion(&self,query:&str) ->Result< Vec<String>,Error >{
-        let url = self.create_url_from_endpoint("/suggestion");
+        let url = self.create_url_from_endpoint("/suggestions");
         let response = self.client.get(url).query(&[("query",query)]).send().await?;
         let data = response.json::<Vec<String>>().await?;
         Ok(data)
