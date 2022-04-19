@@ -2,7 +2,6 @@ use reqwest::Error;
 
 use crate::api::structure::*;
 
-#[derive (Debug)]
 pub struct API{
     api_url:String,
     region:String,
@@ -57,9 +56,9 @@ impl API{
         Ok(parsed_lines)
     }
 
-    pub async fn trending(&self,region:Option<&str>)->Result< Vec<VideoDetail>,Error>{
+    pub async fn trending(&self)->Result< Vec<VideoDetail>,Error>{
         let url = self.create_url_from_endpoint("/trending");
-        let response = self.client.get(url).query(&[("region",region.unwrap_or("US"))]).send().await?;
+        let response = self.client.get(url).query(&[("region",&self.region)]).send().await?;
         let data = response.json::<Vec<VideoDetail>>().await?;
         print!("{:?}",data);
         Ok(data)
@@ -105,6 +104,5 @@ impl API{
         let data = response.json::<Vec<String>>().await?;
         Ok(data)
     }
-
 }
 
