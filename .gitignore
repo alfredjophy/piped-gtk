@@ -1,1 +1,7 @@
-__pycache__
+*.o
+app
+
+
+# Added by cargo
+
+/target
