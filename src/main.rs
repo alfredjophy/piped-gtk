@@ -8,7 +8,8 @@ async fn main() -> Result<(), Error> {
     //let trending:Vec<api::VideoDetail> = piped.trending(None).await?;
     //let stream = piped.stream("tgB1wUcmbbw").await?;
     //let comments = piped.comments("tgB1wUcmbbw").await?;
-    let suggestion = piped.suggestion("Hello worl").await?;
-    print!("{:?}",suggestion);
+    //let suggestion = piped.suggestion("Hello worl").await?;
+    //let result = piped.login("ddd","ffff").await?;
+    print!("{:?}",result);
     Ok(())
 }

@@ -8,6 +8,12 @@ pub struct PipedInstance {
     pub locations:String
 }
 
+#[derive (Debug,Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum AuthResponse{
+    Token(String),
+    Error(String)
+}
 
 #[derive (Debug,Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -20,9 +26,9 @@ pub struct VideoDetail{
     pub uploader_avatar: Option<String>,
     pub uploaded_date: String,
     pub short_description: Option<String>,
-    pub duration: i64,
-    pub views: i64,
-    pub uploaded: i64,
+    pub duration: i32,
+    pub views: i32,
+    pub uploaded: i32,
     pub uploader_verified: bool
 }
 
@@ -42,7 +48,6 @@ pub struct AudioStream{
     pub video_only: bool
 }
 
-
 #[derive (Deserialize,Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct VideoStream{
@@ -57,9 +62,9 @@ pub struct VideoStream{
     pub quality: String,
     pub url: String,
     pub video_only: bool,
-    pub width:i16,
-    pub height:i16,
-    pub fps:i16
+    pub width:i32,
+    pub height:i32,
+    pub fps:i32
 }
 
 #[derive (Deserialize,Debug)]
@@ -78,11 +83,11 @@ pub struct VideoStreamDetail{
     pub audio_streams : Vec<AudioStream>,
     pub dash:Option<String>,
     pub description:String,
-    pub dislikes:i64,
-    pub duration:i64,
+    pub dislikes:i32,
+    pub duration:i32,
     pub hls:Option<String>,
     pub lbry_id:Option<String>,
-    pub likes:i64,
+    pub likes:i32,
     pub livestream:bool,
     pub proxy_url:Option<String>,
     pub related_streams:Vec<VideoDetail>,
@@ -94,7 +99,7 @@ pub struct VideoStreamDetail{
     pub uploader_url:String,
     pub uploader_verified:bool,
     pub video_streams:Vec<VideoStream>,
-    pub views:i64
+    pub views:i32
 }
 
 #[derive (Deserialize,Debug)]
@@ -106,7 +111,7 @@ pub struct Comment {
     pub commented_time:String,
     pub commentor_url:String,
     pub hearted:bool,
-    pub like_count:i64,
+    pub like_count:i32,
     pub pinned:bool,
     pub thumbnail: String,
     pub verified:bool

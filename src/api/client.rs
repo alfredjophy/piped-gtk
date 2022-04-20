@@ -2,6 +2,8 @@ use reqwest::Error;
 
 use crate::api::structure::*;
 
+use std::collections::HashMap;
+
 pub struct API{
     api_url:String,
     region:String,
@@ -20,6 +22,25 @@ impl API{
     fn create_url_from_endpoint(&self,endpoint:&str)->String{
         format!("{}/{}",self.api_url,endpoint)
     }
+    pub async fn login(&self,username:&str,password:&str)->Result<AuthResponse,Error>{
+        let url=self.create_url_from_endpoint("/login");
+        let mut body = HashMap::new();
+        body.insert("username",username);
+        body.insert("password",password);
+        let response = self.client.post(url).json(&body).send().await?;
+        let result = response.json::<AuthResponse>().await?;
+        Ok(result)
+    }
+    pub async fn register(&self,username:&str,password:&str)->Result<AuthResponse,Error>{
+        let url=self.create_url_from_endpoint("/register");
+        let mut body = HashMap::new();
+        body.insert("username",username);
+        body.insert("password",password);
+        let response = self.client.post(url).json(&body).send().await?;
+        let result = response.json::<AuthResponse>().await?;
+        Ok(result)
+    }
+
     pub async fn get_instances(&self) -> Result< Vec<PipedInstance>, Error> {
         let request_url = "https://raw.githubusercontent.com/wiki/TeamPiped/Piped-Frontend/Instances.md";
         let response = self.client.get(request_url).send().await?;
@@ -104,5 +125,6 @@ impl API{
         let data = response.json::<Vec<String>>().await?;
         Ok(data)
     }
+
 }
 
