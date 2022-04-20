@@ -24,24 +24,24 @@ pub struct VideoDetail{
     pub uploader_name: String,
     pub uploader_url: String,
     pub uploader_avatar: Option<String>,
-    pub uploaded_date: String,
+    pub uploaded_date: Option<String>,
     pub short_description: Option<String>,
-    pub duration: i32,
-    pub views: i32,
-    pub uploaded: i32,
+    pub duration: i64,
+    pub views: i64,
+    pub uploaded: i64,
     pub uploader_verified: bool
 }
 
 #[derive (Deserialize,Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct AudioStream{
-    pub bitrate: i32, 
+    pub bitrate: i64, 
     pub codec: Option<String>, 
     pub format: String, 
-    pub index_end: i32, 
-    pub index_start: i32, 
-    pub init_start: i32, 
-    pub init_end: i32, 
+    pub index_end: i64, 
+    pub index_start: i64, 
+    pub init_start: i64, 
+    pub init_end: i64, 
     pub mime_type: String, 
     pub quality: String,
     pub url: String,
@@ -51,20 +51,20 @@ pub struct AudioStream{
 #[derive (Deserialize,Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct VideoStream{
-    pub bitrate: i32, 
+    pub bitrate: i64, 
     pub codec: Option<String>, 
     pub format: String, 
-    pub index_end: i32, 
-    pub index_start: i32, 
-    pub init_start: i32, 
-    pub init_end: i32, 
+    pub index_end: i64, 
+    pub index_start: i64, 
+    pub init_start: i64, 
+    pub init_end: i64, 
     pub mime_type: String, 
     pub quality: String,
     pub url: String,
     pub video_only: bool,
-    pub width:i32,
-    pub height:i32,
-    pub fps:i32
+    pub width:i64,
+    pub height:i64,
+    pub fps:i64
 }
 
 #[derive (Deserialize,Debug)]
@@ -83,11 +83,11 @@ pub struct VideoStreamDetail{
     pub audio_streams : Vec<AudioStream>,
     pub dash:Option<String>,
     pub description:String,
-    pub dislikes:i32,
-    pub duration:i32,
+    pub dislikes:i64,
+    pub duration:i64,
     pub hls:Option<String>,
     pub lbry_id:Option<String>,
-    pub likes:i32,
+    pub likes:i64,
     pub livestream:bool,
     pub proxy_url:Option<String>,
     pub related_streams:Vec<VideoDetail>,
@@ -99,7 +99,7 @@ pub struct VideoStreamDetail{
     pub uploader_url:String,
     pub uploader_verified:bool,
     pub video_streams:Vec<VideoStream>,
-    pub views:i32
+    pub views:i64
 }
 
 #[derive (Deserialize,Debug)]
@@ -111,7 +111,7 @@ pub struct Comment {
     pub commented_time:String,
     pub commentor_url:String,
     pub hearted:bool,
-    pub like_count:i32,
+    pub like_count:i64,
     pub pinned:bool,
     pub thumbnail: String,
     pub verified:bool
@@ -133,7 +133,7 @@ pub struct Channel{
     pub avatar_url:Option<String>,
     pub banner_url:Option<String>,
     pub nextpage:Option<String>,
-    pub subscriber_count : i32,
+    pub subscriber_count : i64,
     pub verified: bool,
     pub related_streams:Vec<VideoDetail>
 }

@@ -41,6 +41,14 @@ impl API{
         Ok(result)
     }
 
+    pub async fn feed(&self)->Result<Vec<VideoDetail>,Error>{
+        let url=self.create_url_from_endpoint("/feed");
+        let auth_token = "c0c64d6f-c2e7-4294-b1ad-d305eabb2227";
+        let response = self.client.get(url).query(&[("authToken",auth_token)]).send().await?;
+        let result = response.json::<Vec<VideoDetail>>().await?;
+        Ok(result)
+    }
+
     pub async fn get_instances(&self) -> Result< Vec<PipedInstance>, Error> {
         let request_url = "https://raw.githubusercontent.com/wiki/TeamPiped/Piped-Frontend/Instances.md";
         let response = self.client.get(request_url).send().await?;
