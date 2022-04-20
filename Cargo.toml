@@ -1,5 +1,5 @@
 [package]
-name = "yt-gtk"
+name = "piped-gtk"
 version = "0.1.0"
 edition = "2021"
 
