@@ -137,3 +137,25 @@ pub struct Channel{
     pub verified: bool,
     pub related_streams:Vec<VideoDetail>
 }
+
+
+#[derive (Debug,Deserialize)]
+#[serde(untagged)]
+pub enum FeedResponse{
+    Feed(Vec<VideoDetail>),
+    Error { error: String }
+}
+
+#[derive (Debug,Deserialize)]
+#[serde(untagged)]
+pub enum VideoStreamResponse{
+    Stream(VideoStream),
+    Error {error: String}
+}
+
+#[derive (Debug,Deserialize)]
+#[serde(untagged)]
+pub enum ChannelResponse{
+    Stream(Channel),
+    Error {error: String}
+}

@@ -51,11 +51,11 @@ impl API{
         Ok(result)
     }
 
-    pub async fn feed(&self)->Result<Vec<VideoDetail>>{
+    pub async fn feed(&self)->Result<FeedResponse>{
         let url=self.create_url_from_endpoint("/feed");
         let auth_token = "c0c64d6f-c2e7-4294-b1ad-d305eabb2227";
         let response = self.client.get(url).query(&[("authToken",auth_token)]).send().await?;
-        let result = response.json::<Vec<VideoDetail>>().await?;
+        let result = response.json::<FeedResponse>().await?;
         Ok(result)
     }
     
@@ -112,10 +112,10 @@ impl API{
         Ok(data)
     }
 
-    pub async fn stream(&self,video_id:&str)->Result<VideoStreamDetail>{
+    pub async fn stream(&self,video_id:&str)->Result<VideoStreamResponse>{
         let url = self.create_url_from_endpoint(&format!("/streams/{}",video_id));
         let response = self.client.get(url).send().await?;
-        let data = response.json::<VideoStreamDetail>().await?;
+        let data = response.json::<VideoStreamResponse>().await?;
         Ok(data)
         
     }
@@ -127,10 +127,10 @@ impl API{
         Ok(data)
     }
 
-    pub async fn channel_from_id(&self,channel_id:&str) -> Result<Channel>{
+    pub async fn channel_from_id(&self,channel_id:&str) -> Result<ChannelResponse>{
         let url = self.create_url_from_endpoint(&format!("/channel/{}",channel_id));
         let response = self.client.get(url).send().await?;
-        let data = response.json::<Channel>().await?;
+        let data = response.json::<ChannelResponse>().await?;
         Ok(data)
     }
     // broken 
@@ -140,10 +140,10 @@ impl API{
         //let data = response.json::<Channel>().await?;
         //Ok(data)
     //}
-    pub async fn channel_from_username(&self,username:&str)->Result<Channel>{
+    pub async fn channel_from_username(&self,username:&str)->Result<ChannelResponse>{
         let url = self.create_url_from_endpoint(&format!("/user/{}",username));
         let response = self.client.get(url).send().await?;
-        let data = response.json::<Channel>().await?;
+        let data = response.json::<ChannelResponse>().await?;
         Ok(data)
     }
     pub async fn suggestion(&self,query:&str) ->Result< Vec<String> >{
