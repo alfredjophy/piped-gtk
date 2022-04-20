@@ -25,10 +25,13 @@ impl API{
                             })).build()
         }
     }
-    
+
+    // Utilities
     fn create_url_from_endpoint(&self,endpoint:&str)->String{
         format!("{}/{}",self.api_url,endpoint)
     }
+
+    // Authentication/Authenticated endpoints
     pub async fn login(&self,username:&str,password:&str)->Result<AuthResponse>{
         let url=self.create_url_from_endpoint("/login");
         let mut body = HashMap::new();
@@ -55,7 +58,8 @@ impl API{
         let result = response.json::<Vec<VideoDetail>>().await?;
         Ok(result)
     }
-
+    
+    // External
     pub async fn get_instances(&self) -> Result< Vec<PipedInstance>> {
         let request_url = "https://raw.githubusercontent.com/wiki/TeamPiped/Piped-Frontend/Instances.md";
         let response = self.client.get(request_url).send().await?;
@@ -91,7 +95,15 @@ impl API{
         }
         Ok(parsed_lines)
     }
-
+    
+    // to get resources like images/thumbnails etc
+    pub async fn get_resource(&self,url:&str)->Result<bytes::Bytes>{
+        let response = self.client.get(url).send().await?;
+        let data = response.bytes().await?;
+        Ok(data)
+    }
+    
+    // Base Piped API implementation
     pub async fn trending(&self)->Result< Vec<VideoDetail>>{
         let url = self.create_url_from_endpoint("/trending");
         let response = self.client.get(url).query(&[("region",&self.region)]).send().await?;

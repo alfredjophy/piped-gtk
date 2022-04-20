@@ -1840,6 +1840,7 @@ dependencies = [
 name = "yt-gtk"
 version = "0.1.0"
 dependencies = [
+ "bytes",
  "http-cache-reqwest",
  "reqwest",
  "reqwest-middleware",
