@@ -1,13 +1,15 @@
-use reqwest::Error;
-
 use crate::api::structure::*;
 
 use std::collections::HashMap;
 
+use reqwest::Client;
+use reqwest_middleware::{ClientBuilder, Result};
+use http_cache_reqwest::{Cache, CacheMode, CACacheManager, HttpCache};
+
 pub struct API{
     api_url:String,
     region:String,
-    client:reqwest::Client
+    client:reqwest_middleware::ClientWithMiddleware,
 }
 
 impl API{
@@ -15,14 +17,19 @@ impl API{
         API{
             api_url:"https://pipedapi.kavin.rocks".to_string(),
             region:"US".to_string(),
-            client:reqwest::Client::new()
+            client:ClientBuilder::new(Client::new()).with(
+                        Cache(HttpCache {
+                                 mode: CacheMode::Default,
+                                 manager: CACacheManager::default(),
+                                 options: None,
+                            })).build()
         }
     }
     
     fn create_url_from_endpoint(&self,endpoint:&str)->String{
         format!("{}/{}",self.api_url,endpoint)
     }
-    pub async fn login(&self,username:&str,password:&str)->Result<AuthResponse,Error>{
+    pub async fn login(&self,username:&str,password:&str)->Result<AuthResponse>{
         let url=self.create_url_from_endpoint("/login");
         let mut body = HashMap::new();
         body.insert("username",username);
@@ -31,7 +38,7 @@ impl API{
         let result = response.json::<AuthResponse>().await?;
         Ok(result)
     }
-    pub async fn register(&self,username:&str,password:&str)->Result<AuthResponse,Error>{
+    pub async fn register(&self,username:&str,password:&str)->Result<AuthResponse>{
         let url=self.create_url_from_endpoint("/register");
         let mut body = HashMap::new();
         body.insert("username",username);
@@ -41,7 +48,7 @@ impl API{
         Ok(result)
     }
 
-    pub async fn feed(&self)->Result<Vec<VideoDetail>,Error>{
+    pub async fn feed(&self)->Result<Vec<VideoDetail>>{
         let url=self.create_url_from_endpoint("/feed");
         let auth_token = "c0c64d6f-c2e7-4294-b1ad-d305eabb2227";
         let response = self.client.get(url).query(&[("authToken",auth_token)]).send().await?;
@@ -49,7 +56,7 @@ impl API{
         Ok(result)
     }
 
-    pub async fn get_instances(&self) -> Result< Vec<PipedInstance>, Error> {
+    pub async fn get_instances(&self) -> Result< Vec<PipedInstance>> {
         let request_url = "https://raw.githubusercontent.com/wiki/TeamPiped/Piped-Frontend/Instances.md";
         let response = self.client.get(request_url).send().await?;
         let data=response.text().await?;
@@ -85,7 +92,7 @@ impl API{
         Ok(parsed_lines)
     }
 
-    pub async fn trending(&self)->Result< Vec<VideoDetail>,Error>{
+    pub async fn trending(&self)->Result< Vec<VideoDetail>>{
         let url = self.create_url_from_endpoint("/trending");
         let response = self.client.get(url).query(&[("region",&self.region)]).send().await?;
         let data = response.json::<Vec<VideoDetail>>().await?;
@@ -93,7 +100,7 @@ impl API{
         Ok(data)
     }
 
-    pub async fn stream(&self,video_id:&str)->Result<VideoStreamDetail,Error>{
+    pub async fn stream(&self,video_id:&str)->Result<VideoStreamDetail>{
         let url = self.create_url_from_endpoint(&format!("/streams/{}",video_id));
         let response = self.client.get(url).send().await?;
         let data = response.json::<VideoStreamDetail>().await?;
@@ -101,33 +108,33 @@ impl API{
         
     }
 
-    pub async fn comments(&self,video_id:&str)->Result< Comments,Error >{
+    pub async fn comments(&self,video_id:&str)->Result< Comments >{
         let url = self.create_url_from_endpoint(&format!("/comments/{}",video_id));
         let response = self.client.get(url).send().await?;
         let data = response.json::<Comments>().await?;
         Ok(data)
     }
 
-    pub async fn channel_from_id(&self,channel_id:&str) -> Result<Channel,Error>{
+    pub async fn channel_from_id(&self,channel_id:&str) -> Result<Channel>{
         let url = self.create_url_from_endpoint(&format!("/channel/{}",channel_id));
         let response = self.client.get(url).send().await?;
         let data = response.json::<Channel>().await?;
         Ok(data)
     }
     // broken 
-    //pub async fn channel_from_name(&self,channel_name:&str)->Result<Channel,Error>{
+    //pub async fn channel_from_name(&self,channel_name:&str)->Result<Channel>{
         //let url = self.create_url_from_endpoint(&format!("/c/{}",channel_name));
         //let response = self.client.get(url).send().await?;
         //let data = response.json::<Channel>().await?;
         //Ok(data)
     //}
-    pub async fn channel_from_username(&self,username:&str)->Result<Channel,Error>{
+    pub async fn channel_from_username(&self,username:&str)->Result<Channel>{
         let url = self.create_url_from_endpoint(&format!("/user/{}",username));
         let response = self.client.get(url).send().await?;
         let data = response.json::<Channel>().await?;
         Ok(data)
     }
-    pub async fn suggestion(&self,query:&str) ->Result< Vec<String>,Error >{
+    pub async fn suggestion(&self,query:&str) ->Result< Vec<String> >{
         let url = self.create_url_from_endpoint("/suggestions");
         let response = self.client.get(url).query(&[("query",query)]).send().await?;
         let data = response.json::<Vec<String>>().await?;
