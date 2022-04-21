@@ -11,7 +11,7 @@ async fn main() -> Result<(),Error> {
     //let suggestion = piped.suggestion("Hello worl").await?;
     //let result = piped.login("ddd","ffff").await?;
     //let feed = piped.feed().await?;
-    let results = piped.search("hello wrold",api::SearchFilters::All).await?;
+    let results = piped.search("hello wrold",api::SearchFilters::MusicSongs).await?;
     print!("{:?}",results);
     //let image = piped.get_resource("https://pipedproxy-ams-2.kavin.rocks/vi/I8p1yqnuk8Y/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBxWF_5FYR5KO6FXzqI8FFT2NqBvA&host=i.ytimg.com").await?;
     //print!("{:?}",image);

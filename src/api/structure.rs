@@ -22,7 +22,7 @@ pub struct VideoDetail{
     pub title: String,
     pub thumbnail: String,
     pub uploader_name: String,
-    pub uploader_url: String,
+    pub uploader_url: Option<String>,
     pub uploader_avatar: Option<String>,
     pub uploaded_date: Option<String>,
     pub short_description: Option<String>,
@@ -160,7 +160,7 @@ pub enum ChannelResponse{
     Error {error: String}
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone,Copy)]
 pub enum SearchFilters{
     All,
     Videos,
@@ -190,7 +190,7 @@ impl SearchFilters {
 #[derive (Debug,Deserialize)]
 pub struct SearchResponse{
     pub items:Vec<VideoDetail>,
-    pub nextpage:String,
+    pub nextpage:Option<String>,
     pub suggestions:Option<String>,
     pub corrected:bool
 
