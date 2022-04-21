@@ -6,15 +6,15 @@ use reqwest::Client;
 use reqwest_middleware::{ClientBuilder, Result};
 use http_cache_reqwest::{Cache, CacheMode, CACacheManager, HttpCache};
 
-pub struct API{
+pub struct PIPED{
     api_url:String,
     region:String,
     client:reqwest_middleware::ClientWithMiddleware,
 }
 
-impl API{
-    pub fn new() -> API{
-        API{
+impl PIPED{
+    pub fn new() -> PIPED{
+        PIPED{
             api_url:"https://pipedapi.kavin.rocks".to_string(),
             region:"US".to_string(),
             client:ClientBuilder::new(Client::new()).with(
@@ -69,15 +69,13 @@ impl API{
     
         fn parse_line(line:&str) -> Option<PipedInstance>{
             let split = line.split('|').collect::<Vec<&str>>();
-            let _instance:PipedInstance;
             if split.len() > 4 {
-                _instance = PipedInstance{
+                Some(PipedInstance{
                     name: split[0].trim().to_string(),
                     url: split[1].trim().to_string(),
                     cdn: (split[3].trim()=="Yes"),
                     locations: split[2].trim().to_string()
-                };
-                Some(_instance)
+                })
             }
             else{
                 None
@@ -87,8 +85,12 @@ impl API{
         print!("{}",lines.len());
         let mut parsed_lines:Vec<PipedInstance> = Vec::new();
     
-        for i in lines{
-            let x = parse_line(i);
+        for i in 0..lines.len(){
+            // skipping table headers and stuff
+            if i < 4{
+                continue;
+            }
+            let x = parse_line(lines[i]);
             if x.is_some(){
                 parsed_lines.push(x.unwrap());
             }
