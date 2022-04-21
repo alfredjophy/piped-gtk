@@ -159,3 +159,39 @@ pub enum ChannelResponse{
     Stream(Channel),
     Error {error: String}
 }
+
+#[derive(Debug, Clone, Copy)]
+pub enum SearchFilters{
+    All,
+    Videos,
+    Channels,
+    Playlists,
+    MusicSongs,
+    MusicVideos,
+    MusicAlbums,
+    MusicPlaylists
+}
+
+impl SearchFilters {
+	pub fn to_string(&self) -> &str {
+		match *self {
+            SearchFilters::All             => "all",
+            SearchFilters::Videos          => "videos",
+            SearchFilters::Channels        => "channels",
+            SearchFilters::Playlists       => "playlists",
+            SearchFilters::MusicSongs      => "music_songs",
+            SearchFilters::MusicVideos     => "music_videos",
+            SearchFilters::MusicAlbums     => "music_albums",
+            SearchFilters::MusicPlaylists  => "music_playlists"
+		}
+	}
+}
+
+#[derive (Debug,Deserialize)]
+pub struct SearchResponse{
+    pub items:Vec<VideoDetail>,
+    pub nextpage:String,
+    pub suggestions:Option<String>,
+    pub corrected:bool
+
+}

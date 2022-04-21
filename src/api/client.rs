@@ -154,6 +154,13 @@ impl PIPED{
         let data = response.json::<Vec<String>>().await?;
         Ok(data)
     }
+    pub async fn search(&self,query:&str,filter:SearchFilters)->Result<SearchResponse>{
+        let url = self.create_url_from_endpoint("/search");
+        let response = self.client.get(url).query(&[("q",query),("filter",filter.to_string())]).send().await?;
+        let result = response.json::<SearchResponse>().await?;
+        Ok(result)
+        
+    }
 
 }
 
